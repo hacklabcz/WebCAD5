@@ -1,0 +1,125 @@
+<!--
+	WebCAD5 - A Javascript/HTML5 CAD software
+	
+	Copyright (C) 2012, Giuseppe Leone <joebew42@gmail.com>
+	
+	This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+<html>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		
+		<script src="js/component.js"></script>
+		<script src="js/customShapes.js"></script>
+		<script src="js/inputHandler.js"></script>
+		<script src="js/logicDisplay.js"></script>
+		<script src="js/graphicDisplay.js"></script>
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var gd = new GraphicDisplay("CADCanvas", 800, 600);
+				gd.unitMeasure = "m";
+				gd.unitConversionFactor = 1/100; 
+				gd.showOrigin = false;
+				//gd.readonly = true;
+				
+				// Button behaviour
+				$("#gd_navigate").click(function(){gd.setMode(gd.MODES.NAVIGATE);});
+				$("#gd_move").click(function(){gd.setMode(gd.MODES.MOVE);});
+				$("#gd_edit").click(function(){gd.setMode(gd.MODES.EDIT);});
+				$("#gd_delete").click(function(){gd.setMode(gd.MODES.DELETE);});
+				
+				$("#gd_zoomin").click(function(){gd.zoomIn();});
+				$("#gd_zoomout").click(function(){gd.zoomOut();});
+				
+				$("#gd_addpoint").click(function(){gd.setMode(gd.MODES.ADDPOINT);});
+				$("#gd_addline").click(function(){gd.setMode(gd.MODES.ADDLINE);});
+				$("#gd_addcircle").click(function(){gd.setMode(gd.MODES.ADDCIRCLE);});
+				$("#gd_addarc").click(function(){gd.setMode(gd.MODES.ADDARC);});
+				$("#gd_addrectangle").click(function(){gd.setMode(gd.MODES.ADDRECTANGLE);});
+				$("#gd_addmeasure").click(function(){gd.setMode(gd.MODES.ADDMEASURE);});
+				$("#gd_addlabel").click(function(){gd.setMode(gd.MODES.ADDLABEL);});
+				
+				// # # # CUSTOM BINDING # # # 
+				$("#gd_add_serbatoio_orizzontale").click(function(){
+					gd.setModeShape(getShapeSerbatoioOrizzontale);
+				});
+
+				$("#gd_add_serbatoio_verticale").click(function(){
+					gd.setModeShape(getShapeSerbatoioVerticale);
+				});
+
+				$("#gd_add_edificio").click(function(){
+					gd.setModeShape(getShapeEdificio);
+				});
+
+				$("#gd_add_albero").click(function(){
+					gd.setModeShape(getShapeAlbero);
+				});
+
+				$("#gd_add_ostacolo").click(function(){
+					gd.setModeShape(getShapeOstacolo);
+				});
+
+				$("#gd_add_autobotte").click(function(){
+					gd.setModeShape(getShapeAutobotte);
+				});
+				// # # # END CUSTOM BINDING # # # 
+				
+				initCAD(gd);
+			});
+		</script>
+		<style type="text/css">
+		#CADDisplay {
+			border: 3px inset #ccc;
+		}
+		</style>
+	</head>
+	<body>
+		<input id="gd_navigate" type="button" value="naviga" />
+		<input id="gd_move" type="button" value="muovi" />
+		<input id="gd_edit" type="button" value="modifica" />
+		<input id="gd_delete" type="button" value="cancella" />
+		|
+		<input id="gd_zoomout" type="button" value="-" />
+		<input id="gd_zoomin" type="button" value="+" />
+		|
+		<input id="gd_undo" type="button" value="<-" />
+		<input id="gd_redo" type="button" value="->" />
+		|
+		<input id="gd_addpoint" type="button" value="punto" />
+		<input id="gd_addline" type="button" value="linea" />
+		<input id="gd_addcircle" type="button" value="cerchio" />
+		<input id="gd_addarc" type="button" value="arco" />
+		<input id="gd_addrectangle" type="button" value="rettangolo" />
+		|
+		<input id="gd_addmeasure" type="button" value="measure" />
+		<input id="gd_addlabel" type="button" value="label" />
+		<br/>
+		<input id="gd_add_serbatoio_orizzontale" type="button" value="serbatoio orizzontale" />
+		<input id="gd_add_serbatoio_verticale" type="button" value="serbatoio verticale" />
+		<input id="gd_add_edificio" type="button" value="edificio" />
+		<input id="gd_add_albero" type="button" value="albero" />
+		<input id="gd_add_ostacolo" type="button" value="ostacolo" />
+		<input id="gd_add_autobotte" type="button" value="autobotte" />
+		<hr/>
+		<canvas id="CADCanvas"
+				width="800"
+				height="600"
+				onContextMenu="javascript: return false;"
+				tabindex="1"></canvas>
+	</body>
+</html>
