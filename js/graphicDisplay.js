@@ -117,7 +117,7 @@ function GraphicDisplay(displayName, width, height) {
 	this.cvn = 0; // Canvas HTML element
 	this.context; // Canvas object
 	
-	this.tooltipDefault = "JSCAD"
+	this.tooltipDefault = "WebCAD5"
 	this.tooltip = this.tooltipDefault;
 	
 	this.keyboard = null;
